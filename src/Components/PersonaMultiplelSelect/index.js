@@ -112,6 +112,7 @@ export const PersonaMultiplelSelect = ({ options = [], change, title = '', max }
 
       </Modal>
 
+
     </TouchableOpacity>
   );
 }
