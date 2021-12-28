@@ -1,7 +1,8 @@
 import React, { useState, forwardRef, useImperativeHandle, createRef } from 'react';
 
 import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import Icons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { utils } from '../../Utils';
 
 // import { styles } from './styles';
 
@@ -26,6 +27,31 @@ export const PersonalInput = forwardRef((props, ref) => {
   }));
 
 
+  const useMask = (txt) => {
+
+    let value;
+
+    if (props.mask === 'cep') {
+      value = utils.maskCEP(txt);
+    }
+
+    if (props.mask === 'documents') {
+      value = utils.maskDocuments(txt);
+    }
+
+    if (props.mask === 'birthdate') {
+      value = utils.maskBirthDate(txt);
+
+    }
+    if (props.mask === 'phone') {
+      value = utils.maskPhone(txt);
+    }
+
+    props.inputMaskChange(value);
+  }
+
+  // 79950-000
+
   return (
     <View style={styles.container}>
 
@@ -34,6 +60,7 @@ export const PersonalInput = forwardRef((props, ref) => {
         ref={inputRef}
         underlineColorAndroid='transparent'
         placeholderTextColor="#7B8794"
+        onChangeText={(text) => useMask(text)}
         {...props}
         secureTextEntry={securit}
       />
