@@ -1,18 +1,26 @@
 import React, { useState, forwardRef, useImperativeHandle, createRef } from 'react';
-
-import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { utils } from '../../Utils';
 
-// import { styles } from './styles';
+
+/**
+   * Esse componente usa as seguintes propriedades:
+   * 
+   * @param {label} - [opcional] - Usado para inserir um label a cima do campo do inpu.
+   * @param {secureTextEntry} - [opcional] - Usado para mostrar ou esconder o conteudo do input, recomendado para uso de inputs de senha.
+   * @param {inconName} - [opcional] - Usado para inserir icones (necessario a instalação da lib react-native-vector-icons). Utiliza icones do MaterialCommunityIcons
+   * @param {mask} - [opcional] - Usado para inserir mascaras de formatação nos input (Carregar o arquivo de Utils no projeto para a utilização dessa prop).
+   * @param {inputMaskChange} - [opcional] - Esse parametro torna-se obrigatorio ao utilizar mascaras, o mesmo passa uma função para o onChangeText do componente.
+   */
+
+
 
 export const PersonalInput = forwardRef((props, ref) => {
 
   const [securit, setSecurit] = useState(props.secureTextEntry)
   const [error, setError] = useState(false);
   const inputRef = createRef();
-
-
 
   useImperativeHandle(ref, () => ({
     focusOnError() {
@@ -25,7 +33,6 @@ export const PersonalInput = forwardRef((props, ref) => {
     },
 
   }));
-
 
   const useMask = (txt) => {
 
@@ -50,65 +57,104 @@ export const PersonalInput = forwardRef((props, ref) => {
     props.inputMaskChange(value);
   }
 
-  // 79950-000
-
   return (
+
     <View style={styles.container}>
 
-      <TextInput autoCorrect={false}
-        style={[styles.input, { borderColor: error ? '#e91e63' : '#e4e7eb' }]}
-        ref={inputRef}
-        underlineColorAndroid='transparent'
-        placeholderTextColor="#7B8794"
-        onChangeText={(text) => useMask(text)}
-        {...props}
-        secureTextEntry={securit}
-      />
-
-      <Icons name={props.inconName}
-        size={26} color={error ? '#e91e63' : '#444'}
-        style={styles.icon} />
-
-      {props.secureTextEntry &&
-        <TouchableOpacity onPress={() => setSecurit(!securit)} >
-
-          <Icons name={securit ? "eye" : "eye-off"}
-            size={26} color={error ? '#e91e63' : '#444'}
-            style={styles.iconSecurit} />
-
-        </TouchableOpacity>
+      {props?.label &&
+        <Text style={styles.label}>{props?.label}</Text>
       }
+
+      <View style={[styles.inputWrapper, { borderColor: error ? '#e91e63' : '#e4e7eb' }]}>
+
+        <Icons name={props.inconName}
+          size={26} color={error ? '#e91e63' : '#444'}
+          style={styles.icon} />
+
+        <TextInput autoCorrect={false}
+          style={styles.input}
+          ref={inputRef}
+          underlineColorAndroid='transparent'
+          placeholderTextColor={error ? '#e91e63' : "#7B8794"}
+          onChangeText={(text) => useMask(text)}
+          {...props}
+          secureTextEntry={securit}
+        />
+
+
+        {props.secureTextEntry &&
+          <TouchableOpacity onPress={() => setSecurit(!securit)} >
+
+            <Icons name={securit ? "eye" : "eye-off"}
+              size={26} color={error ? '#e91e63' : '#444'}
+              style={styles.iconSecurit} />
+
+          </TouchableOpacity>
+        }
+
+      </View>
 
     </View>
   );
 })
 
 const styles = StyleSheet.create({
-  container: {
+
+  container: { marginTop: 20 },
+  label: { marginBottom: 5 },
+
+  inputWrapper: {
     flexDirection: 'row',
-    marginTop: 20
+    alignItems: 'center',
+    height: 50,
+    width: '100%',
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingHorizontal: 10
+
   },
 
   input: {
-    height: 50,
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-    paddingLeft: 40,
-    marginHorizontal: 20,
-    borderRadius: 8,
     fontSize: 18,
-    borderWidth: 1
+    flex: 1,
+    color: '#444'
+
   },
 
   icon: {
-    position: 'absolute',
-    left: 30,
-    top: 12
+    marginRight: 10
   },
 
-  iconSecurit: {
-    position: 'absolute',
-    right: 30,
-    top: 12
-  }
 })
+
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flexDirection: 'row',
+//     marginTop: 20
+//   },
+
+//   input: {
+//     height: 50,
+//     flex: 1,
+//     backgroundColor: '#f8f9fa',
+//     paddingLeft: 40,
+//     marginHorizontal: 20,
+//     borderRadius: 8,
+//     fontSize: 18,
+//     borderWidth: 1
+//   },
+
+//   icon: {
+//     position: 'absolute',
+//     left: 30,
+//     top: 12
+//   },
+
+//   iconSecurit: {
+//     position: 'absolute',
+//     right: 30,
+//     top: 12
+//   }
+// })
