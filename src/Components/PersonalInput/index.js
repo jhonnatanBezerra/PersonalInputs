@@ -57,6 +57,7 @@ export const PersonalInput = forwardRef((props, ref) => {
     props.inputMaskChange(value);
   }
 
+
   return (
 
     <View style={styles.container}>
